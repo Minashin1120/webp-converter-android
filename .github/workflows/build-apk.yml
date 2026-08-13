@@ -43,7 +43,8 @@ jobs:
       - name: Report build failure
         if: failure()
         run: |
-          echo "::error file=app/build.gradle.kts,line=1::$(tail -c 3000 build.log | tr '\n' ' ' | tr '\r' ' ')"
+          summary=$(grep -E -i 'FAILURE:|What went wrong|Caused by:|(^|[[:space:]])error:' build.log | tail -n 20 | tr '\n' ' ' | tr '\r' ' ')
+          echo "::error file=app/build.gradle.kts,line=1::$summary"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
