@@ -1,0 +1,6 @@
+{
+  "name": "WebP Converter",
+  "description": "Convert images (PNG, JPG, JPEG) to WebP format with customizable compression quality, lossless mode, EXIF preservation, and modern animations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
