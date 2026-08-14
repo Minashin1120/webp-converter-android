@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- A small, static conversion mark keeps the Android 12 splash fast and clean. -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M8,10C8,8.895 8.895,8 10,8H26C27.105,8 28,8.895 28,10V13H11V35H26V38H10C8.895,38 8,37.105 8,36V10Z" />
+    <path
+        android:fillColor="#FFE9DDFF"
+        android:pathData="M22,16H38C39.105,16 40,16.895 40,18V36C40,37.105 39.105,38 38,38H22C20.895,38 20,37.105 20,36V18C20,16.895 20.895,16 22,16ZM24,20V34H36V20H24Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M16,17L16,31L27,24L16,17Z" />
+    <path
+        android:fillColor="#FF6750A4"
+        android:pathData="M29,23H36V26H29V23Z" />
+</vector>

@@ -11,11 +11,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -79,20 +76,10 @@ class MainActivity : ComponentActivity() {
     private val viewModel: ConverterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
+        // Keep the platform splash compatible on Android versions below 12 without
+        // adding a custom exit animation.
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-
-        splashScreen.setOnExitAnimationListener { splashScreenView ->
-            splashScreenView.iconView?.let { iconView ->
-                iconView.animate()
-                    .scaleX(1.18f)
-                    .scaleY(1.18f)
-                    .alpha(0f)
-                    .setDuration(420L)
-                    .withEndAction { splashScreenView.remove() }
-                    .start()
-            } ?: splashScreenView.remove()
-        }
         enableEdgeToEdge()
 
         setContent {
@@ -183,8 +170,8 @@ fun WebPConverterApp(
         bottomBar = {
             AnimatedVisibility(
                 visible = uiState.images.isNotEmpty(),
-                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
                 BatchActionBottomBar(
                     totalImages = uiState.images.size,
