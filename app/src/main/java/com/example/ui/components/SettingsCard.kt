@@ -205,8 +205,8 @@ fun SettingsCard(
                                         }
                                     },
                                     modifier = Modifier
-                                        .width(48.dp)
-                                        .height(44.dp)
+                                        .width(56.dp)
+                                        .height(56.dp)
                                         .testTag("quality_number_input"),
                                     keyboardOptions = KeyboardOptions(
                                         keyboardType = KeyboardType.Number,
@@ -382,4 +382,3 @@ fun SettingsCard(
         }
     }
 }
-

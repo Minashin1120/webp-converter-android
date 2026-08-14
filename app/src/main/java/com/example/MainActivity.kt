@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
@@ -78,7 +79,20 @@ class MainActivity : ComponentActivity() {
     private val viewModel: ConverterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        splashScreen.setOnExitAnimationListener { splashScreenView ->
+            splashScreenView.iconView?.let { iconView ->
+                iconView.animate()
+                    .scaleX(1.18f)
+                    .scaleY(1.18f)
+                    .alpha(0f)
+                    .setDuration(420L)
+                    .withEndAction { splashScreenView.remove() }
+                    .start()
+            } ?: splashScreenView.remove()
+        }
         enableEdgeToEdge()
 
         setContent {

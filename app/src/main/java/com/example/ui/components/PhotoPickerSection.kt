@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -123,15 +124,16 @@ fun PhotoPickerSection(
             }
 
             // Buttons Row
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
                     onClick = onLaunchPhotoPickerMulti,
                     modifier = Modifier
-                        .weight(1f)
-                        .height(50.dp)
+                        .fillMaxWidth()
+                        .height(52.dp)
                         .testTag("pick_photos_multi_button"),
                     shape = RoundedCornerShape(25.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -145,15 +147,19 @@ fun PhotoPickerSection(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = if (hasImages) "画像を追加" else "写真を選択 (複数可)",
-                        fontWeight = FontWeight.SemiBold
+                        text = if (hasImages) "画像を追加" else "写真を選択（複数選択可）",
+                        fontWeight = FontWeight.SemiBold,
+                        maxLines = 1,
+                        softWrap = false,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
                 OutlinedButton(
                     onClick = onLaunchFilePicker,
                     modifier = Modifier
-                        .height(50.dp)
+                        .fillMaxWidth()
+                        .height(52.dp)
                         .testTag("pick_files_button"),
                     shape = RoundedCornerShape(25.dp)
                 ) {
@@ -165,7 +171,9 @@ fun PhotoPickerSection(
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "ファイル",
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                        softWrap = false
                     )
                 }
             }
@@ -198,4 +206,3 @@ fun PhotoPickerSection(
         }
     }
 }
-
