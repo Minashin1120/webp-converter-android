@@ -15,7 +15,9 @@
 .cxx
 local.properties
 .env
-debug.keystore
+# Local Android Studio keystore only. The committed CI key is ci/debug.keystore.
+/debug.keystore
+!ci/debug.keystore
 
 # Local agent and handover notes are maintained locally and are not published.
 AGENTS.md

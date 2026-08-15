@@ -28,25 +28,15 @@ jobs:
           gradle-version: '9.3.1'
 
       - name: Restore stable debug keystore
-        env:
-          DEBUG_KEYSTORE_BASE64: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
         run: |
           set -euo pipefail
-          if [ -z "${DEBUG_KEYSTORE_BASE64}" ]; then
-            if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
-              echo "::error::Repository secret DEBUG_KEYSTORE_BASE64 is required on main so debug APK signatures stay stable."
-              exit 1
-            fi
-            echo "::warning::DEBUG_KEYSTORE_BASE64 is unavailable. assembleDebug will generate a one-off keystore and the APK cannot overwrite previously installed builds."
-            exit 0
-          fi
-          mkdir -p "${HOME}/.android"
-          printf '%s' "${DEBUG_KEYSTORE_BASE64}" | base64 -d > "${HOME}/.android/debug.keystore"
-          chmod 600 "${HOME}/.android/debug.keystore"
-          if [ ! -s "${HOME}/.android/debug.keystore" ]; then
-            echo "::error::Decoded debug.keystore is empty. Check DEBUG_KEYSTORE_BASE64."
+          if [ ! -s ci/debug.keystore ]; then
+            echo "::error::ci/debug.keystore is missing. Commit the shared debug keystore so APK signatures stay stable."
             exit 1
           fi
+          mkdir -p "${HOME}/.android"
+          cp ci/debug.keystore "${HOME}/.android/debug.keystore"
+          chmod 600 "${HOME}/.android/debug.keystore"
           keytool -list -keystore "${HOME}/.android/debug.keystore" -storepass android -alias androiddebugkey
 
       - name: Build debug APK

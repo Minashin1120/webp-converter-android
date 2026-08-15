@@ -24,4 +24,4 @@ View your app in AI Studio: https://ai.studio/apps/f018d3ed-e089-4a0b-a359-bfc32
 
 Every push to `main` and pull request runs `.github/workflows/build-apk.yml`. It builds `app-debug.apk` and uploads it as the `webp-converter-debug-apk` workflow artifact.
 
-Debug APKs are signed with a stable debug keystore so a new artifact can overwrite a previous install. The workflow decodes repository secret `DEBUG_KEYSTORE_BASE64` to `~/.android/debug.keystore` before `assembleDebug`. That secret must exist for `main` builds. After the first APK produced with this key, later artifacts can be installed without uninstalling. Builds signed with an older, per-run key still need one uninstall.
+Debug APKs are signed with the committed keystore `ci/debug.keystore` (copied to `~/.android/debug.keystore` before `assembleDebug`) so a new artifact can overwrite a previous install. Builds signed with an older, per-run CI key still need one uninstall.
