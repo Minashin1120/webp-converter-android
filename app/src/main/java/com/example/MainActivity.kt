@@ -1,5 +1,6 @@
 package com.example
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -69,6 +70,7 @@ import com.example.ui.components.ImageItemCard
 import com.example.ui.components.PhotoPickerSection
 import com.example.ui.components.SettingsCard
 import com.example.ui.theme.MyApplicationTheme
+import com.example.utils.SharedImageImporter
 import com.example.viewmodel.ConverterViewModel
 
 class MainActivity : ComponentActivity() {
@@ -81,12 +83,32 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        handleIncomingShare(intent)
 
         setContent {
             MyApplicationTheme {
                 WebPConverterApp(viewModel = viewModel)
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIncomingShare(intent)
+    }
+
+    private fun handleIncomingShare(intent: Intent?) {
+        if (intent == null) return
+        if (intent.getBooleanExtra(EXTRA_SHARE_CONSUMED, false)) return
+        val uris = SharedImageImporter.extractImageUris(intent)
+        if (uris.isEmpty()) return
+        intent.putExtra(EXTRA_SHARE_CONSUMED, true)
+        viewModel.addSharedImages(uris, this)
+    }
+
+    companion object {
+        private const val EXTRA_SHARE_CONSUMED = "com.example.extra.SHARE_CONSUMED"
     }
 }
 

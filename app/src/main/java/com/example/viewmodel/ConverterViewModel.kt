@@ -10,6 +10,7 @@ import com.example.model.ConversionConfig
 import com.example.model.ConversionStatus
 import com.example.model.ImageItem
 import com.example.utils.ImageConverter
+import com.example.utils.SharedImageImporter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -50,18 +51,38 @@ class ConverterViewModel(application: Application) : AndroidViewModel(applicatio
     fun addImages(uris: List<Uri>, context: Context) {
         if (uris.isEmpty()) return
         viewModelScope.launch {
-            val newItems = uris.map { uri ->
-                ImageConverter.inspectImage(context, uri)
+            appendImages(uris, context, fromShare = false)
+        }
+    }
+
+    fun addSharedImages(uris: List<Uri>, context: Context) {
+        if (uris.isEmpty()) return
+        viewModelScope.launch {
+            val imported = SharedImageImporter.importUris(context, uris)
+            if (imported.isEmpty()) {
+                _uiState.update { it.copy(toastMessage = "共有された画像を読み込めませんでした") }
+                return@launch
             }
-            _uiState.update { current ->
-                // Avoid exact duplicate URIs
-                val existingUris = current.images.map { it.uri }.toSet()
-                val filtered = newItems.filter { it.uri !in existingUris }
-                current.copy(
-                    images = current.images + filtered,
-                    toastMessage = "${filtered.size}枚の画像を追加しました"
-                )
+            appendImages(imported, context, fromShare = true)
+        }
+    }
+
+    private suspend fun appendImages(uris: List<Uri>, context: Context, fromShare: Boolean) {
+        val newItems = uris.map { uri ->
+            ImageConverter.inspectImage(context, uri)
+        }
+        _uiState.update { current ->
+            val existingUris = current.images.map { it.uri }.toSet()
+            val filtered = newItems.filter { it.uri !in existingUris }
+            val toast = when {
+                filtered.isEmpty() -> "追加できる新しい画像がありませんでした"
+                fromShare -> "共有から${filtered.size}枚の画像を追加しました"
+                else -> "${filtered.size}枚の画像を追加しました"
             }
+            current.copy(
+                images = current.images + filtered,
+                toastMessage = toast
+            )
         }
     }
 

@@ -115,7 +115,7 @@ fun PhotoPickerSection(
                 )
 
                 Text(
-                    text = "PNG, JPG, JPEG, BMP, HEIC, WEBPなど\n1枚でも複数枚でも一括選択できます",
+                    text = "PNG, JPG, JPEG, BMP, HEIC, WEBPなど\n他のアプリの共有メニューからこのアプリを選んでも追加できます",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
